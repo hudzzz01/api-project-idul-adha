@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @unique @default(autoincrement())
+  uuid        String   @id
+  nama        String
+  phone       String
+  email       String   @unique
+  address     String
+  password    String
+  img         String
+  role        String
+  masjid      Masjid   @relation(fields: [uuid_masjid], references: [uuid])
+  uuid_masjid String
+  Tokens      Tokens[]
+}
+
+model Masjid {
+  id         Int    @unique @default(autoincrement())
+  uuid       String @id @unique
+  nama       String
+  alamat     String
+  kode_post  String
+  organisasi String
+  phone      String
+  User       User[]
+}
+
+model Penerima {
+  id            Int      @unique @default(autoincrement())
+  uuid          String   @id
+  uuid_masjid   String
+  tipe_token    String
+  nomor_kupon   String
+  nama_penerima String
+  token         Tokens[]
+}
+
+model Tokens {
+  id                    Int      @unique @default(autoincrement())
+  uuid                  String   @id
+  create_at             String
+  verified_at           String
+  user                  User     @relation(fields: [verified_by_uuid_user], references: [uuid])
+  verified_by_uuid_user String
+  penerima              Penerima @relation(fields: [uuid_penerima], references: [uuid])
+  uuid_penerima         String
+}
