@@ -23,7 +23,7 @@ class ControllerUser{
                 role : user[0].role
             });
             const data = {
-                userId:user[0].id,
+                userId:user[0].uuid,
                 token:token,
             }
             ViewResponse.success(res,"berhasil login",data,200);
