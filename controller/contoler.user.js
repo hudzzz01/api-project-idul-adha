@@ -22,7 +22,11 @@ class ControllerUser{
                 nama: user[0].nama,
                 role : user[0].role
             });
-            ViewResponse.success(res,"berhasil login",token,200);
+            const data = {
+                userId:user[0].id,
+                token:token,
+            }
+            ViewResponse.success(res,"berhasil login",data,200);
         } catch (error) {
             ViewResponse.fail(res,"gagal login",error,gagal);
         }
@@ -45,7 +49,7 @@ class ControllerUser{
         } catch (error) {
             ViewResponse.fail(res,"Gagal mengambil data user",error,gagal);
         }
-    }
+     }
 
     static async readUserById(req,res){
         try {

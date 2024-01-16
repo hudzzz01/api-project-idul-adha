@@ -5,8 +5,8 @@ import routerAuth from "./router/router.auth.js";
 
 const port = 5000;
 app.use(cors({
-    origin: '*',
-  }));
+  origin: '*',
+}));
 app.use("/user",routerUser);
 app.use("/auth",routerAuth);
 

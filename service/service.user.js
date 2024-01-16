@@ -20,19 +20,29 @@ class ServiceUser{
             throw new Error("username telah digunakan");
         }
 
-        return await prisma.user.create({
-            data : {
-                uuid:nanoid(),
-                nama:user.nama,
-                phone:user.phone,
-                email:user.email,
-                address:user.address,
-                password:ciperPassword,
-                img:user.img,
-                role:user.role,
-                uuid_masjid:user.uuid_masjid,
-            }
-        })
+        try {
+
+            return await prisma.user.create({
+                data : {
+                    uuid:nanoid(),
+                    nama:user.nama,
+                    phone:user.phone,
+                    email:user.email,
+                    address:user.address,
+                    password:ciperPassword,
+                    img:user.img,
+                    role:user.role,
+                    uuid_masjid:user.uuid_masjid,
+                }
+            })
+            
+        } catch (error) {
+            deleteFile(`uploads/${user.img}`)
+            throw new Error(error)
+        }
+        
+
+        
     }
     static async readAllUser(){
         return await prisma.user.findMany();
@@ -85,23 +95,29 @@ class ServiceUser{
             deleteFile(`uploads/${user.img}`)
             throw new Error("username telah digunakan");
         }
+        let data = undefined
+        try {
+                data = await prisma.user.update({
+                where:{
+                    uuid:uuid
+                },
+                data:{
+                    nama:user.nama,
+                    phone:user.phone,
+                    email:user.email,
+                    address:user.address,
+                    password:ciperPassword,
+                    img:user.img,
+                    role:user.role,
+                    uuid_masjid:user.uuid_masjid,
+                }
+            })
+        } catch (error) {
+            deleteFile(`uploads/${user.img}`)
+            throw new Error(error)
+        }
         
         
-        const data = await prisma.user.update({
-            where:{
-                uuid:uuid
-            },
-            data:{
-                nama:user.nama,
-                phone:user.phone,
-                email:user.email,
-                address:user.address,
-                password:ciperPassword,
-                img:user.img,
-                role:user.role,
-                uuid_masjid:user.uuid_masjid,
-            }
-        })
 
         if(data){
             deleteFile(`uploads/${dataUser.img}`)
