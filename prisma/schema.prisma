@@ -26,14 +26,15 @@ model User {
 }
 
 model Masjid {
-  id         Int    @unique @default(autoincrement())
-  uuid       String @id @unique
+  id         Int      @unique @default(autoincrement())
+  uuid       String   @id @unique
   nama       String
   alamat     String
   kode_post  String
   organisasi String
   phone      String
   User       User[]
+  Jamaah     Jamaah[]
 }
 
 model Penerima {
@@ -55,4 +56,18 @@ model Tokens {
   verified_by_uuid_user String
   penerima              Penerima @relation(fields: [uuid_penerima], references: [uuid])
   uuid_penerima         String
+}
+
+model Jamaah {
+  id          Int      @unique @default(autoincrement())
+  uuid        String   @id
+  nama        String
+  nama_bapak  String?
+  alamat      String?
+  no_telepon  String?
+  foto        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  masjid      Masjid   @relation(fields: [uuid_masjid], references: [uuid])
+  uuid_masjid String
 }

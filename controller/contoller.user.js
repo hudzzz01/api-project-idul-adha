@@ -1,36 +1,13 @@
-import Token from "../middleware/auth/jwt.js";
 import ServiceUser from "../service/service.user.js";
 import ViewResponse from "../view/view.response.js";
-import CryptoJS from "crypto-js";
+
 
 
 let gagal = 200;
+const kunciEnkripsiPassword = "Mirajmetrics-R4h@5!a";
 
 class ControllerUser{
-    static async login(req,res){
-        try {
-            const user = await ServiceUser.readByEmail(req.body.email);
-            const ciperPassword = CryptoJS.HmacSHA256(req.body.password,"kamu kenapa sini cerita").toString();
-            //console.log(ciperPassword)
-            //console.log(user[0].password)
-            if(user[0].password != ciperPassword){
-                throw Error("password salah");
-            }
-
-            const token = await Token.createToken({
-                id : user[0].id,
-                nama: user[0].nama,
-                role : user[0].role
-            });
-            const data = {
-                userId:user[0].uuid,
-                token:token,
-            }
-            ViewResponse.success(res,"berhasil login",data,200);
-        } catch (error) {
-            ViewResponse.fail(res,"gagal login",error,gagal);
-        }
-    }
+    
     static async createUser(req,res){
         try {
             const user = req.body;

@@ -1,5 +1,5 @@
 import express from "express";
-import ControllerUser from "../controller/contoler.user.js";
+import ControllerUser from "../controller/contoller.user.js";
 import cors from "cors"
 import upload from "../middleware/upload.js";
 import auth from "../middleware/auth/auth.js";

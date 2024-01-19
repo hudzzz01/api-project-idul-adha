@@ -10,7 +10,7 @@ app.use(cors({
 }));
 
 app.get('/', function (req, res) {
-  res.send({"key":"it's work"})
+  res.send({"key":"it's work idul-adha service server"})
 })
 
 export default app;

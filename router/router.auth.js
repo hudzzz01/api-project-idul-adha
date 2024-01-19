@@ -1,5 +1,5 @@
 import express from "express";
-import ControllerUser from "../controller/contoler.user.js";
+import ControllerAuth from "../controller/controller.auth.js";
 import cors from "cors"
 import upload from "../middleware/upload.js";
 
@@ -10,7 +10,15 @@ routerAuth.use(cors({
   }));
 
 routerAuth.post("/login",upload.none(),async(req,res)=>{
-    ControllerUser.login(req,res);
+    ControllerAuth.login(req,res);
+})
+
+routerAuth.post("/reset-password",upload.none(),async(req,res)=>{
+    ControllerAuth.resetPassword(req,res);
+})
+
+routerAuth.post("/validasi-otp",upload.none(),async(req,res)=>{
+  ControllerAuth.validasiOTP(req,res);
 })
 
 export default routerAuth;

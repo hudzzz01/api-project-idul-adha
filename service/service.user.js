@@ -6,9 +6,11 @@ import deleteFile from "../middleware/deleteFile.js";
 const nanoid = customAlphabet('12345678',8);
 
 
+const kunciEnkripsiPassword = "Mirajmetrics-R4h@5!a";
+
 class ServiceUser{
     static async createUser(user){
-        const ciperPassword = CryptoJS.HmacSHA256(user.password,"kamu kenapa sini cerita").toString();
+        const ciperPassword = CryptoJS.HmacSHA256(user.password,kunciEnkripsiPassword).toString();
         //console.log(ciperPassword)
         const username = await prisma.user.findUnique({
             where:{
@@ -17,7 +19,7 @@ class ServiceUser{
         })
         if(username){
             deleteFile(`uploads/${user.img}`)
-            throw new Error("username telah digunakan");
+            throw new Error("email telah digunakan");
         }
 
         try {
@@ -76,7 +78,7 @@ class ServiceUser{
 
     static async updateUser(uuid,user){
         //console.log(id)
-        const ciperPassword = CryptoJS.HmacSHA256(user.password,"kamu kenapa sini cerita").toString();
+        const ciperPassword = CryptoJS.HmacSHA256(user.password,kunciEnkripsiPassword).toString();
         const dataUser = await prisma.user.findUnique({
             where :{
                 uuid:uuid,
@@ -93,7 +95,7 @@ class ServiceUser{
         })
         if(username){
             deleteFile(`uploads/${user.img}`)
-            throw new Error("username telah digunakan");
+            throw new Error("email telah digunakan");
         }
         let data = undefined
         try {
