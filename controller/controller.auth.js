@@ -51,15 +51,19 @@ class ControllerAuth{
             //tambahkan ke format pesan email
             //console.log(userOTP)
             const pesan = Text.textOtp(user.nama,await userOTP)
-            console.log(pesan);
+            //console.log(pesan);
             //return
             
-            //kirim ke email
-            const send = await SendMail.send(user.email,await pesan)   
+            //kirim ke email dengan yahoo (OTP)
+            const send = await SendMail.send(user.email,await pesan)  
+
+            //kirim ke email dengan gmail (OTP)
+            const sendGmail = await SendMail.sendGmail(user.email,await pesan) 
             
             const data = {
                 email : user.email,
-                message : send
+                //message_yahoo : send,
+                message_gmail : sendGmail,
             }
 
             ViewResponse.success(res,"berhasil kirim email",data,200);
