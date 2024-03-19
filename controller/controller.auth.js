@@ -23,9 +23,10 @@ class ControllerAuth{
             }
 
             const token = await Token.createToken({
-                id : user[0].id,
+                uuid : user[0].uuid,
                 nama: user[0].nama,
-                role : user[0].role
+                role : user[0].role,
+                uuid_masjid : user[0].uuid_masjid,
             });
             const data = {
                 userId:user[0].uuid,
@@ -58,12 +59,12 @@ class ControllerAuth{
             const send = await SendMail.send(user.email,await pesan)  
 
             //kirim ke email dengan gmail (OTP)
-            const sendGmail = await SendMail.sendGmail(user.email,await pesan) 
+            //const sendGmail = await SendMail.sendGmail(user.email,await pesan) 
             
             const data = {
                 email : user.email,
-                //message_yahoo : send,
-                message_gmail : sendGmail,
+                message_yahoo : send,
+                //message_gmail : sendGmail,
             }
 
             ViewResponse.success(res,"berhasil kirim email",data,200);

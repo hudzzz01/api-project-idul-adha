@@ -37,7 +37,7 @@ class ControllerJamaah{
     static async createJamaah(req,res){
         try {
             const jamaah = req.body;
-            jamaah.foto = req.file.filename;
+            jamaah.foto = "";//req.file.filename;
             const createJamaah = await ServiceJamaah.createJamaah(jamaah);
             ViewResponse.success(res,"berhasil membuat jamaah baru",createJamaah,200)
         } catch (error) {
@@ -66,7 +66,7 @@ class ControllerJamaah{
     static async updateJamaah(req,res){
         try {
             const jamaah = req.body;
-            jamaah.foto = req.file.filename;
+            jamaah.foto = "";//req.file.filename;
             const newJamaah = await ServiceJamaah.updateJamaah(req.params.id,jamaah);
             ViewResponse.success(res,"berhasil mengubah data jamaah",newJamaah,200);
         } catch (error) {

@@ -9,6 +9,8 @@ Kami berharap Anda dalam keadaan sehat dan baik-baik saja. Kami mendapatkan info
 Berikut adalah OTP Anda: ${otp}
 OTP ini berlaku selama 20 menit 
 
+apifronend.com/lupapasword?=${otp}
+
 Mohon untuk tidak membagikan OTP ini kepada siapapun, termasuk pihak yang mengaku dari dukungan pelanggan. Kami hanya akan meminta Anda memasukkan OTP ini secara aman pada halaman reset kata sandi.
 
 Jika Anda tidak meminta reset kata sandi atau merasa ini adalah kegiatan mencurigakan, segera hubungi tim dukungan kami. Kami akan dengan segera membantu Anda.

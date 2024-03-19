@@ -16,17 +16,26 @@ class ServiceJamaah{
             }
         })
         if(!uuid_masjid){
-            deleteFile(`uploads/${jamaah.foto}`)
+            //deleteFile(`uploads/${jamaah.foto}`)
             throw new Error("uuid masjid tidak terdaftar");
+        }
+        const uuid_family = await prisma.family.findUnique({
+            where:{
+                uuid:jamaah.uuid_family,
+            }
+        })
+        if(!uuid_family){
+            //deleteFile(`uploads/${jamaah.foto}`)
+            throw new Error("uuid family tidak terdaftar");
         }
 
         try {
 
-            return await prisma.Jamaah.create({
+            return await prisma.jamaah.create({
                 data : {
                     uuid:nanoid(),
                     nama:jamaah.nama,
-                    nama_bapak:jamaah.nama_bapak,
+                    uuid_family:jamaah.uuid_family,
                     alamat:jamaah.alamat,
                     no_telepon:jamaah.no_telepon,
                     uuid_masjid:jamaah.uuid_masjid,
@@ -35,7 +44,7 @@ class ServiceJamaah{
             })
             
         } catch (error) {
-            deleteFile(`uploads/${jamaah.foto}`)
+            //deleteFile(`uploads/${jamaah.foto}`)
             throw new Error(error)
         }
         
@@ -81,7 +90,7 @@ class ServiceJamaah{
             }
         });
         if(!dataJamaah){
-            deleteFile(`uploads/${jamaah.foto}`)
+            //deleteFile(`uploads/${jamaah.foto}`)
             throw new Error("id tidak ditemukan");
         }
         const uuid_masjid = await prisma.masjid.findUnique({
@@ -90,8 +99,18 @@ class ServiceJamaah{
             }
         })
         if(!uuid_masjid){
-            deleteFile(`uploads/${jamaah.foto}`)
+            //deleteFile(`uploads/${jamaah.foto}`)
             throw new Error("uuid masjid tidak terdaftar");
+        }
+        
+        const uuid_family = await prisma.family.findUnique({
+            where:{
+                uuid:jamaah.uuid_family,
+            }
+        })
+        if(!uuid_family){
+            //deleteFile(`uploads/${jamaah.foto}`)
+            throw new Error("uuid family tidak terdaftar");
         }
         let data = undefined
         try {
@@ -101,7 +120,7 @@ class ServiceJamaah{
                 },
                 data:{
                     nama:jamaah.nama,
-                    nama_bapak:jamaah.nama_bapak,
+                    uuid_family:jamaah.uuid_family,
                     alamat:jamaah.alamat,
                     no_telepon:jamaah.no_telepon,
                     uuid_masjid:jamaah.uuid_masjid,
@@ -109,14 +128,14 @@ class ServiceJamaah{
                 }
             })
         } catch (error) {
-            deleteFile(`uploads/${jamaah.foto}`)
+            //deleteFile(`uploads/${jamaah.foto}`)
             throw new Error(error)
         }
         
         
 
         if(data){
-            deleteFile(`uploads/${dataJamaah.foto}`)
+            //deleteFile(`uploads/${dataJamaah.foto}`)
         }
         return data
     }
@@ -129,7 +148,7 @@ class ServiceJamaah{
         if(!data){
             throw new Error('id tidak ditemukan')
         }
-        deleteFile(`uploads/${data.foto}`)
+        //deleteFile(`uploads/${data.foto}`)
         return await prisma.jamaah.delete({
             where:{
                 uuid:uuid
