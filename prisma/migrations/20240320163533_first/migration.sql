@@ -70,6 +70,9 @@ CREATE TABLE `Jamaah` (
     `alamat` VARCHAR(191) NULL,
     `no_telepon` VARCHAR(191) NULL,
     `foto` VARCHAR(191) NULL,
+    `bin` VARCHAR(191) NULL,
+    `binti` VARCHAR(191) NULL,
+    `jabatan_di_keluarga` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `uuid_masjid` VARCHAR(191) NOT NULL,
@@ -87,7 +90,7 @@ CREATE TABLE `Family` (
     `tempat_lahir` VARCHAR(191) NULL,
     `tanggal_lahir` VARCHAR(191) NOT NULL,
     `alamat` VARCHAR(191) NULL,
-    `keluarahan` VARCHAR(191) NULL,
+    `kelurahan` VARCHAR(191) NULL,
     `kecamatan` VARCHAR(191) NULL,
     `kota_atau_kabupaten` VARCHAR(191) NULL,
     `no_hp_wa` VARCHAR(191) NULL,
@@ -95,7 +98,6 @@ CREATE TABLE `Family` (
     `email` VARCHAR(191) NULL,
 
     UNIQUE INDEX `Family_id_key`(`id`),
-    UNIQUE INDEX `Family_tanggal_lahir_key`(`tanggal_lahir`),
     PRIMARY KEY (`uuid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -138,13 +140,13 @@ ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_verified_by_uuid_user_fkey` FOREIGN 
 ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_uuid_penerima_fkey` FOREIGN KEY (`uuid_penerima`) REFERENCES `Penerima`(`uuid`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Jamaah` ADD CONSTRAINT `Jamaah_uuid_masjid_fkey` FOREIGN KEY (`uuid_masjid`) REFERENCES `Masjid`(`uuid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Jamaah` ADD CONSTRAINT `Jamaah_uuid_masjid_fkey` FOREIGN KEY (`uuid_masjid`) REFERENCES `Masjid`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Jamaah` ADD CONSTRAINT `Jamaah_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Jamaah` ADD CONSTRAINT `Jamaah_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Zakat` ADD CONSTRAINT `Zakat_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Zakat` ADD CONSTRAINT `Zakat_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Sodakoh` ADD CONSTRAINT `Sodakoh_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Sodakoh` ADD CONSTRAINT `Sodakoh_uuid_family_fkey` FOREIGN KEY (`uuid_family`) REFERENCES `Family`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;

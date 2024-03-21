@@ -18,7 +18,7 @@ routerJamaah.get("/:id",auth,async(req,res)=>{
     ControllerJamaah.readJamaahById(req,res);
 })
 
-routerJamaah.post("/",uploadFotoJamaah.single('foto'),async(req,res)=>{
+routerJamaah.post("/",uploadFotoJamaah.single('foto'),auth,async(req,res)=>{
     ControllerJamaah.createJamaah(req,res);
 })
 

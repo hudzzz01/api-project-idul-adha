@@ -38,6 +38,18 @@ class ControllerZakat{
         }
     }
 
+    static async readZakatByIdWithPagination(req,res){
+        try {
+            console.log("aaaa")
+            const page = req.query.page;
+            const pageTotal = req.query.totalPage;
+            const zakat = await ServiceZakat.readAllZakatWithPagination(page,pageTotal);
+            ViewResponse.success(res,"berhasil mengambil data zakat",zakat,200);
+        } catch (error) {
+            ViewResponse.fail(res,"Gagal mengambil data zakat",error,gagal);
+        }
+    }
+
     static async updateZakat(req,res){
         try {
             const zakat = req.body;

@@ -14,8 +14,13 @@ routerZakat.get("/",auth,async(req,res)=>{
 })
 
 //ambil seluruh data keluarga by ID (wajib Login)
-routerZakat.get("/:id",auth,async(req,res)=>{
-    ControllerZakat.readZakatById(req,res);
+routerZakat.get("/id/:id",auth,async(req,res)=>{
+ControllerZakat.readZakatById(req,res);
+})
+
+routerZakat.get("/pagination",auth,async(req,res)=>{
+    console.log("a")
+    ControllerZakat.readZakatByIdWithPagination(req,res);
 })
 
 routerZakat.post("/",upload.none(),auth,async(req,res)=>{
@@ -23,12 +28,12 @@ routerZakat.post("/",upload.none(),auth,async(req,res)=>{
 })
 
 //edit data keluarga by id (wajib Login)
-routerZakat.put("/:id",upload.none(),auth,async(req,res)=>{
+routerZakat.put("/id/:id",upload.none(),auth,async(req,res)=>{
     ControllerZakat.updateZakat(req,res);
 })
 
 //hapus data keluarga (requre Login)
-routerZakat.delete("/:id",auth,async(req,res)=>{
+routerZakat.delete("/id/:id",auth,async(req,res)=>{
     ControllerZakat.deleteZakat(req,res);
 })
 

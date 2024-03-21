@@ -55,6 +55,17 @@ class ServiceSodakoh{
         return data
     }
     
+    static async readByFamilyId(uuid_family){
+        const data = await prisma.sodakoh.findMany({
+            where:{
+                uuid_family:uuid_family
+            }
+        })
+        if(data.length == 0){
+            throw new Error("Data tidak di temukan");
+        }
+        return data[0]
+    }
 
     static async updateSodakoh(uuid,sodakoh){
         //console.log(id)

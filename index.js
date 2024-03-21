@@ -9,6 +9,7 @@ import routerTokenKupon from "./router/router.token.kupon.js";
 import routerFamily from "./router/router.family.js";
 import routerZakat from "./router/router.zakat.js"; 
 import routerSodakoh from "./router/router.sodakoh.js";
+import routerInputZakat from "./router/v1_Router_InputZakat/router.input.zakat.js";
 
 const port = 5000;
 app.use(cors({
@@ -23,6 +24,7 @@ app.use("/token-Kupon",routerTokenKupon);
 app.use("/family",routerFamily);
 app.use("/zakat",routerZakat);
 app.use("/sodakoh",routerSodakoh);
+app.use("/input-zakat",routerInputZakat);
 
 
 app.listen(port)

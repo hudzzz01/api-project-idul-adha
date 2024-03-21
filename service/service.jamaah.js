@@ -39,7 +39,10 @@ class ServiceJamaah{
                     alamat:jamaah.alamat,
                     no_telepon:jamaah.no_telepon,
                     uuid_masjid:jamaah.uuid_masjid,
-                    foto:jamaah.foto
+                    foto:jamaah.foto,
+                    bin:jamaah.bin,
+                    binti:jamaah.binti,
+                    jabatan_di_keluarga:jamaah.jabatan_di_keluarga
                 }
             })
             
@@ -65,7 +68,17 @@ class ServiceJamaah{
         }
         return data
     }
-
+    static async readByFamilyId(uuid_family){
+        const data = await prisma.jamaah.findMany({
+            where:{
+                uuid_family:uuid_family
+            }
+        })
+        if(data.length == 0){
+            throw new Error("Data tidak di temukan");
+        }
+        return data
+    }
     static async readByEmail(email){
         
         let data = await prisma.jamaah.findMany({
@@ -124,7 +137,10 @@ class ServiceJamaah{
                     alamat:jamaah.alamat,
                     no_telepon:jamaah.no_telepon,
                     uuid_masjid:jamaah.uuid_masjid,
-                    foto:jamaah.foto
+                    foto:jamaah.foto,
+                    bin:jamaah.bin,
+                    binti:jamaah.binti,
+                    jabatan_di_keluarga:jamaah.jabatan_di_keluarga
                 }
             })
         } catch (error) {

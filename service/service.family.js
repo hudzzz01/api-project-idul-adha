@@ -39,15 +39,15 @@ class ServiceFamily{
         return await prisma.family.findMany();
     }
     static async readById(uuid){
-        const data = await prisma.family.findUnique({
+        const data = await prisma.family.findMany({
             where:{
                 uuid:uuid
             }
         })
-        if(!data){
+        if(data.length == 0){
             throw new Error("Data tidak di temukan");
         }
-        return data
+        return data[0]
     }
 
     static async readByEmail(email){

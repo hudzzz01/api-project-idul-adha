@@ -65,18 +65,21 @@ model Tokens {
 }
 
 model Jamaah {
-  id          Int      @unique @default(autoincrement())
-  uuid        String   @id
-  nama        String
-  alamat      String?
-  no_telepon  String?
-  foto        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  masjid      Masjid   @relation(fields: [uuid_masjid], references: [uuid])
-  uuid_masjid String
-  family      Family   @relation(fields: [uuid_family], references: [uuid])
-  uuid_family String
+  id                  Int      @unique @default(autoincrement())
+  uuid                String   @id
+  nama                String
+  alamat              String?
+  no_telepon          String?
+  foto                String?
+  bin                 String?
+  binti               String?
+  jabatan_di_keluarga String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  masjid              Masjid   @relation(fields: [uuid_masjid], references: [uuid], onDelete: Cascade)
+  uuid_masjid         String
+  family              Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
+  uuid_family         String
 }
 
 model Family {
@@ -84,7 +87,7 @@ model Family {
   uuid                 String    @id
   nama_kepala_keluarga String
   tempat_lahir         String?
-  tanggal_lahir        String    @unique
+  tanggal_lahir        String
   alamat               String?
   kelurahan            String?
   kecamatan            String?
@@ -103,7 +106,7 @@ model Zakat {
   jumlah_zakat Int
   tahun        Int?
   create_at    DateTime @default(now())
-  family       Family   @relation(fields: [uuid_family], references: [uuid])
+  family       Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
   uuid_family  String
 }
 
@@ -113,6 +116,6 @@ model Sodakoh {
   jumlah_sodakoh Int
   tahun          Int?
   create_at      DateTime @default(now())
-  family         Family   @relation(fields: [uuid_family], references: [uuid])
+  family         Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
   uuid_family    String
 }

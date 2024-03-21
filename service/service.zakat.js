@@ -43,6 +43,19 @@ class ServiceZakat{
     static async readAllZakat(){
         return await prisma.zakat.findMany();
     }
+    static async readAllZakatWithPagination(nowPage,totalPageSize){
+        const page = parseInt(nowPage) || 1;
+        const pageSize = parseInt(totalPageSize) || 10;
+        const skip = (page - 1) * pageSize;
+
+        return await prisma.zakat.findMany(
+            {
+                skip: skip,
+                take: pageSize,
+            }
+        );
+    }
+    
     static async readById(uuid){
         const data = await prisma.zakat.findUnique({
             where:{
