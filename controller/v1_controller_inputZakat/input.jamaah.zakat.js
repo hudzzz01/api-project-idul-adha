@@ -17,6 +17,8 @@ let gagal = 200;
 
 class ControllerInputZakatV1{
 
+   
+
 
     static async deletePembayaranZakat(req,res){
         try{
@@ -36,11 +38,14 @@ class ControllerInputZakatV1{
         }
     }
 
-    static async seluruhPembayaranZakat(req,res){
+
+    static async seluruhPembayaranZakatWithPagination(req,res){
         try {
             let results = [];
-
-             let zakats = await ServiceZakat.readAllZakat();
+            const page = req.query.page;
+            const pageTotal = req.query.totalPage;
+            const zakats = await ServiceZakat.readAllZakatWithPagination(page,pageTotal);
+            
          
             for (let i = 0; i < zakats.length; i++) {
                 const zakat = zakats[i];
@@ -61,6 +66,47 @@ class ControllerInputZakatV1{
                     }
                 )
             }
+            ViewResponse.success(res,"berhasil ambil seluruh data zakat yang telah di input",results,200)
+
+        } catch (error) {
+            ViewResponse.fail(res,"gagal ambil data",error,gagal);
+        }
+
+        
+    }
+
+    static async seluruhPembayaranZakat(req,res){
+        try {
+            let results = [];
+
+            let zakats = await ServiceZakat.readAllZakat();
+            let banyakZakat = zakats.length
+
+          
+            
+         
+            for (let i = 0; i < zakats.length; i++) {
+                const zakat = zakats[i];
+                const family = await ServiceFamily.readById(zakat.uuid_family);
+                const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
+                const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
+                const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
+                console.log(jumlah_sodakoh)
+                results.push(
+                    {
+                        uuid_zakat : await zakat.uuid,
+                        id_keluarga : await zakat.uuid_family,
+                        nama_kepala_keluarga : await family.nama_kepala_keluarga,
+                        anggota_keluarga:await jamaahs,
+                        jumlah_anggota_keluarga : await jamaahs.length,
+                        jumlah_pembayaran_zakat : await zakat.jumlah_zakat,
+                        jumlah_pembayaran_sodaqoh : jumlah_sodakoh,
+                        total_bayar :await zakat.jumlah_zakat + jumlah_sodakoh,
+                        banyakKeluarga : await banyakZakat,
+                    }
+                    )
+            }
+            console.log(results)
             ViewResponse.success(res,"berhasil ambil seluruh data zakat yang telah di input",results,200)
 
         } catch (error) {
@@ -152,12 +198,15 @@ class ControllerInputZakatV1{
                 const jamaah = pembayarZakat.anggota_keluarga[i];
                 jamaah.uuid_masjid = pembayarZakat.uuid_masjid;
                 jamaah.uuid_family = resutNewFamily.uuid;
-                jumlahJamaah++;
                 try {
-                    let newJamaah = await ServiceJamaah.createJamaah(jamaah);
-                    //console.log(newJamaah);
-                    
-                    dataJamaahs.push(newJamaah);
+                    if(jamaah.nama != ""){
+                        jumlahJamaah++;
+    
+                        let newJamaah = await ServiceJamaah.createJamaah(jamaah);
+                        //console.log(newJamaah);
+                        
+                        dataJamaahs.push(newJamaah);
+                    }
                 } catch (error) {
                     throw new Error(`gagal input jamaan ${jamaah} error : ${error}`)
                 }
@@ -165,11 +214,11 @@ class ControllerInputZakatV1{
             }            
             
             //console.log(`jumlah jamaah ${jumlahJamaah} : ${pembayarZakat.anggota_keluarga.length}`);
-            if(jumlahJamaah != pembayarZakat.anggota_keluarga.length){
-                throw new Error(`jumlah jamaah yang di input tidak sesuai ${jumlahJamaah} : ${pembayarZakat.anggota_keluarga.length}`)
-            }
+            // if(jumlahJamaah != pembayarZakat.anggota_keluarga.length){
+            //     throw new Error(`jumlah jamaah yang di input tidak sesuai ${jumlahJamaah} : ${pembayarZakat.anggota_keluarga.length}`)
+            // }
             
-            let amoutZakat = parseInt(pembayarZakat.zakat)*(jumlahJamaah);
+            let amoutZakat = parseInt(/*pembayarZakat.zakat*/40000)*(jumlahJamaah);
             //insert zakat
             let zakat = {
                 uuid_family : resutNewFamily.uuid,

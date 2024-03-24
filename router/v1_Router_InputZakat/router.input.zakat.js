@@ -17,15 +17,19 @@ routerInputZakat.use(cors({
 //   return res.send(200)
 // })
 
-routerInputZakat.post("/",async(req,res)=>{
+routerInputZakat.post("/input/",async(req,res)=>{
   ControllerInputZakatV1.inputZakatJamaah(req,res);
 })
 
-routerInputZakat.get("/",async(req,res)=>{
+routerInputZakat.get("/search/all/",async(req,res)=>{
   ControllerInputZakatV1.seluruhPembayaranZakat(req,res);
 })
 
-routerInputZakat.delete("/:uuid",async(req,res)=>{
+routerInputZakat.get("/search/pagination/",async(req,res)=>{
+  ControllerInputZakatV1.seluruhPembayaranZakatWithPagination(req,res);
+})
+
+routerInputZakat.delete("/delete/:uuid",async(req,res)=>{
   ControllerInputZakatV1.deletePembayaranZakat(req,res);
 })
 export default routerInputZakat;
