@@ -29,6 +29,10 @@ routerInputZakat.get("/search/pagination/",async(req,res)=>{
   ControllerInputZakatV1.seluruhPembayaranZakatWithPagination(req,res);
 })
 
+routerInputZakat.get("/search/kesimpulan/",async(req,res)=>{
+  ControllerInputZakatV1.kesimpulan(req,res);
+})
+
 routerInputZakat.delete("/delete/:uuid",async(req,res)=>{
   ControllerInputZakatV1.deletePembayaranZakat(req,res);
 })
