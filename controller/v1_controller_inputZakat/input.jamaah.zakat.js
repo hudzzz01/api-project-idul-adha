@@ -10,6 +10,7 @@ import ControllerZakat from "../controller.zakat.js";
 import ServiceMasjid from "../../service/service.masjid.js";
 import ControllerFamily from "../controller.family.js";
 import ControllerJamaah from "../controller.jamaah.js";
+import ServiceFidyah from "../../service/service.fidyah.js";
 const nanoid = customAlphabet("12345678", 8);
 
 let gagal = 200;
@@ -57,6 +58,7 @@ class ControllerInputZakatV1 {
 
   static async deletePembayaranZakat(req, res) {
     try {
+      console.log("Delete pembayaran Zakat => ")
       let uuid_zakat = req.params.uuid;
       console.log(uuid_zakat);
 
@@ -78,6 +80,7 @@ class ControllerInputZakatV1 {
 
   static async seluruhPembayaranZakatWithPagination(req, res) {
     try {
+      console.log("Get all Zakat With Pagination => ")
       let results = [];
       const page = req.query.page;
       const pageTotal = req.query.totalPage;
@@ -86,11 +89,18 @@ class ControllerInputZakatV1 {
         pageTotal
       );
 
+      
+      let banyakZakat = zakats.length;
+
       for (let i = 0; i < zakats.length; i++) {
         const zakat = zakats[i];
         const family = await ServiceFamily.readById(zakat.uuid_family);
         const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
         const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
+        const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
+        const jumlah_fidyah = fidyah.jumlah_fidyah;
+        const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
+        //console.log(jumlah_fidyah);
         results.push({
           uuid_zakat: await zakat.uuid,
           id_keluarga: await zakat.uuid_family,
@@ -98,10 +108,13 @@ class ControllerInputZakatV1 {
           anggota_keluarga: await jamaahs,
           jumlah_anggota_keluarga: await jamaahs.length,
           jumlah_pembayaran_zakat: await zakat.jumlah_zakat,
-          jumlah_pembayaran_sodaqoh: await sodakoh.jumlah_sodaqoh,
-          total_bayar:
-            (await zakat.jumlah_zakat) + (await sodakoh.jumlah_sodaqoh),
+          jumlah_pembayaran_sodaqoh: jumlah_sodakoh,
+          jumlah_pembayaran_fidyah : jumlah_fidyah,
+          total_bayar: (await zakat.jumlah_zakat) + jumlah_sodakoh + jumlah_fidyah,
+          banyakKeluarga: await banyakZakat,
         });
+
+        
       }
       ViewResponse.success(
         res,
@@ -116,6 +129,7 @@ class ControllerInputZakatV1 {
 
   static async seluruhPembayaranZakat(req, res) {
     try {
+      console.log("Get all Zakat => ")
       let results = [];
 
       let zakats = await ServiceZakat.readAllZakat();
@@ -126,8 +140,10 @@ class ControllerInputZakatV1 {
         const family = await ServiceFamily.readById(zakat.uuid_family);
         const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
         const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
+        const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
+        const jumlah_fidyah = fidyah.jumlah_fidyah;
         const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
-        console.log(jumlah_sodakoh);
+        //console.log(jumlah_fidyah);
         results.push({
           uuid_zakat: await zakat.uuid,
           id_keluarga: await zakat.uuid_family,
@@ -136,11 +152,12 @@ class ControllerInputZakatV1 {
           jumlah_anggota_keluarga: await jamaahs.length,
           jumlah_pembayaran_zakat: await zakat.jumlah_zakat,
           jumlah_pembayaran_sodaqoh: jumlah_sodakoh,
-          total_bayar: (await zakat.jumlah_zakat) + jumlah_sodakoh,
+          jumlah_pembayaran_fidyah : jumlah_fidyah,
+          total_bayar: (await zakat.jumlah_zakat) + jumlah_sodakoh + jumlah_fidyah,
           banyakKeluarga: await banyakZakat,
         });
+        
       }
-      console.log(results);
       ViewResponse.success(
         res,
         "berhasil ambil seluruh data zakat yang telah di input",
@@ -153,6 +170,7 @@ class ControllerInputZakatV1 {
   }
 
   static async inputZakatJamaah(req, res) {
+    console.log("Post input Zakat => ")
     /*
         Bentuk data yang masuk sebagai berikut :
         biodata
@@ -176,6 +194,7 @@ class ControllerInputZakatV1 {
 
         jumlah_zakat : 0
         jumlah_sodakoh :0
+        jumlah_fidyah : 0
         uuid_masjid : ""
 
         */
@@ -255,7 +274,7 @@ class ControllerInputZakatV1 {
         tahun: "2024",
       };
       let newZakat = await ServiceZakat.createZakat(zakat);
-
+      
       //insert sodakoh
       let sodakoh = {
         uuid_family: resutNewFamily.uuid,
@@ -263,6 +282,15 @@ class ControllerInputZakatV1 {
         tahun: "2024",
       };
       let newsodakoh = await ServiceSodakoh.createSodakoh(sodakoh);
+
+
+      //insert fidyah
+      let fidyah = {
+        uuid_family: resutNewFamily.uuid,
+        jumlah_fidyah: pembayarZakat.fidyah,
+        tahun: "2024",
+      };
+      let newfidyah = await ServiceFidyah.createFidyah(fidyah);
 
       //console.log(newsodakoh);
       //throw new Error("tes");
@@ -272,6 +300,7 @@ class ControllerInputZakatV1 {
         keluarga: resutNewFamily,
         anggota_keluarga: dataJamaahs,
         zakat: newZakat,
+        fidyah : newfidyah,
         sodakoh: newsodakoh,
       };
 
