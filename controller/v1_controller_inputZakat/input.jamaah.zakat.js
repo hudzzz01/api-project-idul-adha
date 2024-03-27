@@ -294,7 +294,7 @@ class ControllerInputZakatV1 {
       //     throw new Error(`jumlah jamaah yang di input tidak sesuai ${jumlahJamaah} : ${pembayarZakat.anggota_keluarga.length}`)
       // }
 
-      let amoutZakat = parseInt(pembayarZakat.zakat) * jumlahJamaah;
+      let amoutZakat = parseInt(pembayarZakat.zakat) * (jumlahJamaah+1);
       //insert zakat
       console.log(pembayarZakat.tim);
       let zakat = {
@@ -331,6 +331,7 @@ class ControllerInputZakatV1 {
       //console.log(newsodakoh);
       //throw new Error("tes");
       //
+
 
       let resut = {
         keluarga: resutNewFamily,
