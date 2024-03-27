@@ -107,6 +107,7 @@ model Zakat {
   jumlah_zakat Int
   tahun        Int?
   create_at    DateTime @default(now())
+  tim          String?
   family       Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
   uuid_family  String
 }

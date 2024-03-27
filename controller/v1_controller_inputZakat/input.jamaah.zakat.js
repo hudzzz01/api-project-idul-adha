@@ -24,6 +24,7 @@ class ControllerInputZakatV1 {
       const jumlahJamah = (await ServiceJamaah.readAllJamaah()).length;
       let jumlahSeluruhZakat = 0;
       let jumlahSeluruhSodakoh = 0;
+      let jumlahSeluruhfidyah = 0;
       const zakats = await ServiceZakat.readAllZakat();
       for (let i = 0; i < zakats.length; i++) {
         const zakat = zakats[i];
@@ -37,13 +38,25 @@ class ControllerInputZakatV1 {
         jumlahSeluruhSodakoh += await parseInt(sodakoh.jumlah_sodakoh);
         
       }
-      const jumlahSeluruhnya = jumlahSeluruhSodakoh + jumlahSeluruhZakat;
+
+      const fidyahs = await ServiceFidyah.readAllFidyah();
+      for (let i = 0; i < fidyahs.length; i++) {
+        const fidyah = fidyahs[i];
+
+        jumlahSeluruhfidyah += await parseInt(fidyah.jumlah_fidyah);
+        
+      }
+
+
+
+      const jumlahSeluruhnya = jumlahSeluruhSodakoh + jumlahSeluruhZakat + jumlahSeluruhfidyah;
 
       let myData = {
         jumlahKeluarga: jumlahKeluarga,
         jumlahJamah: jumlahJamah,
         jumlahSeluruhZakat: jumlahSeluruhZakat,
         jumlahSeluruhSodakoh: jumlahSeluruhSodakoh,
+        jumlahSeluruhfidyah: jumlahSeluruhfidyah,
         jumlahSeluruhnya: jumlahSeluruhnya,
       };
       ViewResponse.success(
@@ -144,7 +157,7 @@ class ControllerInputZakatV1 {
         const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
         const jumlah_fidyah = fidyah.jumlah_fidyah;
         const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
-        //console.log(jumlah_fidyah);
+        console.log(jumlah_fidyah);
         results.push({
           uuid_zakat: await zakat.uuid,
           id_keluarga: await zakat.uuid_family,
@@ -241,8 +254,22 @@ class ControllerInputZakatV1 {
       let dataJamaahs = [];
 
       //console.log(`anggota keluarga : ${pembayarZakat.anggota_keluarga[0].nama}`);
+      const headFamilly ={
+        uuid_masjid: pembayarZakat.uuid_masjid,
+        nama : pembayarZakat.nama_lengkap,
+        bin : pembayarZakat.bin,
+        binti :pembayarZakat.binti,
+        jabatan_di_keluarga :"kepala_keluarga",
+        uuid_family : resutNewFamily.uuid
+      }
 
+      let newHeadFamily = await ServiceJamaah.createJamaah(headFamilly);
+            //console.log(newJamaah);
+
+      dataJamaahs.push(newHeadFamily);
       //kepala keluarga masukin ke jamaah
+      
+      //
 
       for (let i = 0; i < pembayarZakat.anggota_keluarga.length; i++) {
         const jamaah = pembayarZakat.anggota_keluarga[i];
@@ -272,11 +299,15 @@ class ControllerInputZakatV1 {
       let zakat = {
         uuid_family: resutNewFamily.uuid,
         jumlah_zakat: amoutZakat,
+        tim: pembayarZakat.tim,
         tahun: "2024",
       };
       let newZakat = await ServiceZakat.createZakat(zakat);
       
       //insert sodakoh
+      if(pembayarZakat.sodakoh === "" || pembayarZakat.sodakoh == null){
+        pembayarZakat.sodakoh = 0;
+      }
       let sodakoh = {
         uuid_family: resutNewFamily.uuid,
         jumlah_sodakoh: pembayarZakat.sodakoh,
@@ -284,8 +315,11 @@ class ControllerInputZakatV1 {
       };
       let newsodakoh = await ServiceSodakoh.createSodakoh(sodakoh);
 
-
+      
       //insert fidyah
+      if(pembayarZakat.fidyah === "" || pembayarZakat.fidyah == null){
+        pembayarZakat.fidyah = 0;
+      }
       let fidyah = {
         uuid_family: resutNewFamily.uuid,
         jumlah_fidyah: pembayarZakat.fidyah,
