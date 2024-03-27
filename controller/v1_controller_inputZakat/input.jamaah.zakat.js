@@ -296,6 +296,7 @@ class ControllerInputZakatV1 {
 
       let amoutZakat = parseInt(pembayarZakat.zakat) * jumlahJamaah;
       //insert zakat
+      console.log(pembayarZakat.tim);
       let zakat = {
         uuid_family: resutNewFamily.uuid,
         jumlah_zakat: amoutZakat,

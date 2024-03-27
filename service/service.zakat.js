@@ -29,6 +29,7 @@ class ServiceZakat{
                     uuid_family:zakat.uuid_family,
                     jumlah_zakat:zakat.jumlah_zakat,
                     tahun:zakat.tahun,
+                    tim:zakat.tim,
                 }
             })
             
