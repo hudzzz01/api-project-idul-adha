@@ -93,6 +93,19 @@ class ServiceJamaah{
         return data
     }
     
+    static async readName(name){
+        
+        let data = await prisma.jamaah.findMany({
+            where:{
+                nama:name
+            }
+        })
+
+        if(data.length == 0){
+            throw new Error("nama tidak ditemukan");
+        }
+        return data
+    }
 
     static async updateJamaah(uuid,jamaah){
         //console.log(id)

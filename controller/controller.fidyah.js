@@ -40,7 +40,7 @@ class ControllerFidyah{
 
     static async readFidyahByIdWithPagination(req,res){
         try {
-            console.log("aaaa")
+            //console.log("aaaa")
             const page = req.query.page;
             const pageTotal = req.query.totalPage;
             const fidyah = await ServiceFidyah.readAllFidyahWithPagination(page,pageTotal);

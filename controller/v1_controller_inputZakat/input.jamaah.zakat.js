@@ -17,6 +17,7 @@ let gagal = 200;
 // const kunciEnkripsiPassword = "Mirajmetrics-R4h@5!a";
 
 class ControllerInputZakatV1 {
+
   static async kesimpulan(req, res) {
     try {
       const jumlahKeluarga = (await ServiceFamily.readAllFamily()).length;
@@ -266,7 +267,7 @@ class ControllerInputZakatV1 {
       //     throw new Error(`jumlah jamaah yang di input tidak sesuai ${jumlahJamaah} : ${pembayarZakat.anggota_keluarga.length}`)
       // }
 
-      let amoutZakat = parseInt(/*pembayarZakat.zakat*/ 40000) * jumlahJamaah;
+      let amoutZakat = parseInt(pembayarZakat.zakat) * jumlahJamaah;
       //insert zakat
       let zakat = {
         uuid_family: resutNewFamily.uuid,
