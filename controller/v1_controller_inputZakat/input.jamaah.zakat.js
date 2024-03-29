@@ -18,16 +18,230 @@ let gagal = 200;
 
 class ControllerInputZakatV1 {
 
+  static async inputKususFidyah(req, res){
+    try {
+      const dataPemberiFidyah = req.body;
+      //buat instace jamaah
+      const jamaah = {
+        nama : dataPemberiFidyah.nama,
+        alamat : dataPemberiFidyah.alamat,
+        nomor_telfon : dataPemberiFidyah.nomor_telfon,
+        bin : dataPemberiFidyah.bin,
+        binti : dataPemberiFidyah.binti,
+        jabatan_di_keluarga : dataPemberiFidyah.jabatan_di_keluarga,
+        uuid_family : dataPemberiFidyah.uuid_family,
+        uuid_masjid : dataPemberiFidyah.uuid_masjid,
+      }    
+      const newJamaahInstace = await ServiceJamaah.createJamaah(jamaah);
+
+      if(!newJamaahInstace){
+        throw new Error("gagal membuat instace jamaah");
+      }
+
+      const uuidJamaah = newJamaahInstace.uuid;
+      //console.log(dataPemberiFidyah.uuid_family);
+      const family = await ServiceFamily.readById(dataPemberiFidyah.uuid_family);
+      //console.log(family);
+  
+      if(!family){
+        throw new Error("uuid family tidak di temukan");
+      }
+      //buat instace fidyah
+      const fidyah = {
+         jumlah_fidyah : parseInt(dataPemberiFidyah.jumlah_fidyah),
+         tahun : "2024",
+         uuid_family : dataPemberiFidyah.uuid_family,
+         uuid_jamaah : uuidJamaah,
+         tim : dataPemberiFidyah.tim,
+      }
+
+      const newInsceFidyah = await ServiceFidyah.createFidyah(fidyah);
+
+      if(!newInsceFidyah){
+        throw new Error("gagal membuat instace fidyah");
+      }
+
+      ViewResponse.success(
+        res,
+        "berhasil menambahkan data fidyah ",
+        newInsceFidyah,
+        200
+      );
+    } catch (error) {
+      console.log(error);
+      ViewResponse.fail(res, "gagal menambah data fidyah", error, gagal);
+    }
+
+  }
+
+  static async seluruhPembayaranFidyah(req,res){
+    try {
+      console.log("Get all fidyah => ")
+      
+      let fidyahs = await ServiceFidyah.readAllFidyah();
+      let banyakFidyah = fidyahs.length;
+      
+      
+      const hasils = [];
+      let jumlahSeluruhFidyah
+      
+      for (let i = 0; i < fidyahs.length; i++) {
+        const fidyah = fidyahs[i];
+        
+        const jamaah = await ServiceJamaah.readById(fidyah.uuid_jamaah);
+        jumlahSeluruhFidyah += parseInt(fidyah.jumlah_fidyah);
+        
+        const hasil = {
+          uuid : fidyah.uuid,
+          nama : jamaah.nama,
+          jumlahFidyah : fidyah.jumlah_fidyah,
+          tim : fidyah.tim,
+        }
+        
+        hasils.push(hasil);
+        
+        
+      }
+      
+      
+      //dapatkan kesimpulan tim
+      let fidyahTim1 = await ServiceFidyah.readByTeam("tim1");
+      let fidyahTim2 = await ServiceFidyah.readByTeam("tim2");
+      let fidyahTim3 = await ServiceFidyah.readByTeam("tim3");
+      let fidyahTim4 = await ServiceFidyah.readByTeam("tim4");
+      let fidyahTim5 = await ServiceFidyah.readByTeam("tim5");
+      let fidyahTim6 = await ServiceFidyah.readByTeam("tim6");
+      let fidyahTim7 = await ServiceFidyah.readByTeam("tim7");
+
+      let totalFidyahTim1 = 0;
+      let totalFidyahTim2 = 0;
+      let totalFidyahTim3 = 0;
+      let totalFidyahTim4 = 0;
+      let totalFidyahTim5 = 0;
+      let totalFidyahTim6 = 0;
+      let totalFidyahTim7 = 0;
+      
+      for (let i = 0; i < fidyahTim1.length; i++) {
+        const fidyah = fidyahTim1[i];
+        totalFidyahTim1 += parseInt(fidyah.jumlah_fidyah);
+      }
+      
+      for (let i = 0; i < fidyahTim2.length; i++) {
+        const fidyah = fidyahTim2[i];
+        totalFidyahTim2 += parseInt(fidyah.jumlah_fidyah);
+      }
+
+      for (let i = 0; i < fidyahTim3.length; i++) {
+        const fidyah = fidyahTim3[i];
+        totalFidyahTim3 += parseInt(fidyah.jumlah_fidyah);
+      }
+
+      for (let i = 0; i < fidyahTim4.length; i++) {
+        const fidyah = fidyahTim4[i];
+        totalFidyahTim4 += parseInt(fidyah.jumlah_fidyah);
+      }
+      
+      for (let i = 0; i < fidyahTim5.length; i++) {
+        const fidyah = fidyahTim5[i];
+        totalFidyahTim5 += parseInt(fidyah.jumlah_fidyah);
+      }
+      
+      for (let i = 0; i < fidyahTim6.length; i++) {
+        const fidyah = fidyahTim6[i];
+        totalFidyahTim6 += parseInt(fidyah.jumlah_fidyah);
+      }
+      
+      for (let i = 0; i < fidyahTim7.length; i++) {
+        const fidyah = fidyahTim7[i];
+        totalFidyahTim7 += parseInt(fidyah.jumlah_fidyah);
+      }
+
+      // console.log(totalFidyahTim1);
+      // console.log(totalFidyahTim2);
+      // console.log(totalFidyahTim3);
+      // console.log(totalFidyahTim4);
+      // console.log(totalFidyahTim5);
+      // console.log(totalFidyahTim6);
+      // console.log(totalFidyahTim7);
+      
+      let results = {
+        banyakFidyah : banyakFidyah,
+        data : hasils,
+        totalFidyahTim1 : totalFidyahTim1,
+        totalFidyahTim2 : totalFidyahTim2,
+        totalFidyahTim3 : totalFidyahTim3,
+        totalFidyahTim4 : totalFidyahTim4,
+        totalFidyahTim5 : totalFidyahTim5,
+        totalFidyahTim6 : totalFidyahTim6,
+        totalFidyahTim7 : totalFidyahTim7,
+      };
+      
+      
+      // console.log(result);
+
+      // throw new Error("Tes error");
+
+      
+      ViewResponse.success(
+        res,
+        "berhasil ambil seluruh data zakat yang telah di input",
+        results,
+        200
+      );
+    } catch (error) {
+      console.log(error)
+      ViewResponse.fail(res, "gagal ambil data", error, gagal);
+    }
+  }
+  
+  static async deletePembayaranFidyah(req, res) {
+    try {
+      console.log("Delete pembayaran Fidyah => ")
+      let uuid_fidyah = req.params.uuid;
+      console.log(uuid_fidyah);
+
+      const fidyah = await ServiceFidyah.readById(uuid_fidyah);
+
+      const jamaah = await ServiceJamaah.deleteJamaah(fidyah.uuid_jamaah);
+
+      const delfidyah = await ServiceFidyah.deleteFidyah(uuid_fidyah);
+      
+
+      ViewResponse.success(
+        res,
+        "berhasil menghapus data fidyah beserta family dan anggotanya",
+        fidyah,
+        200
+      );
+    } catch (error) {
+      console.log(error);
+      ViewResponse.fail(res, "gagal menghapus data  fidyah", error, gagal);
+    }
+  }
+
+
+
   static async kesimpulan(req, res) {
     try {
-      const jumlahKeluarga = (await ServiceFamily.readAllFamily()).length;
+      let jumlahJamaahYangMembayarZakat = 0;
+      const zakats = (await ServiceZakat.readAllZakat());
+
+      for (let i = 0; i < zakats.length; i++) {
+        const zakat  = zakats[i];
+
+        jumlahJamaahYangMembayarZakat += (await ServiceJamaah.readByFamilyId(zakat.uuid_family)).length;
+        
+      }
+
+      const jumlahPembayarFidyah = (await ServiceFidyah.readAllFidyah()).length;
+      const jumlahKeluarga = (await ServiceFamily.readAllFamily()).length-1;
       const jumlahJamah = (await ServiceJamaah.readAllJamaah()).length;
       let jumlahSeluruhZakat = 0;
       let jumlahSeluruhSodakoh = 0;
       let jumlahSeluruhfidyah = 0;
-      const zakats = await ServiceZakat.readAllZakat();
-      for (let i = 0; i < zakats.length; i++) {
-        const zakat = zakats[i];
+      const fidyah = await ServiceZakat.readAllZakat();
+      for (let i = 0; i < fidyah.length; i++) {
+        const zakat = fidyah[i];
 
         jumlahSeluruhZakat += await parseInt(zakat.jumlah_zakat);
       }
@@ -51,13 +265,90 @@ class ControllerInputZakatV1 {
 
       const jumlahSeluruhnya = jumlahSeluruhSodakoh + jumlahSeluruhZakat + jumlahSeluruhfidyah;
 
+
+      //dapatkan kesimpulan tim ZAKAT !!!!!!
+      let fidyahTim1 = await ServiceZakat.readByTeam("tim1");
+      let fidyahTim2 = await ServiceZakat.readByTeam("tim2");
+      let fidyahTim3 = await ServiceZakat.readByTeam("tim3");
+      let fidyahTim4 = await ServiceZakat.readByTeam("tim4");
+      let fidyahTim5 = await ServiceZakat.readByTeam("tim5");
+      let fidyahTim6 = await ServiceZakat.readByTeam("tim6");
+      let fidyahTim7 = await ServiceZakat.readByTeam("tim7");
+
+      let totalFidyahTim1 = 0;
+      let totalFidyahTim2 = 0;
+      let totalFidyahTim3 = 0;
+      let totalFidyahTim4 = 0;
+      let totalFidyahTim5 = 0;
+      let totalFidyahTim6 = 0;
+      let totalFidyahTim7 = 0;
+      
+      for (let i = 0; i < fidyahTim1.length; i++) {
+        const fidyah = fidyahTim1[i];
+        totalFidyahTim1 += parseInt(fidyah.jumlah_zakat);
+      }
+      
+      for (let i = 0; i < fidyahTim2.length; i++) {
+        const fidyah = fidyahTim2[i];
+        totalFidyahTim2 += parseInt(fidyah.jumlah_zakat);
+      }
+
+      for (let i = 0; i < fidyahTim3.length; i++) {
+        const fidyah = fidyahTim3[i];
+        totalFidyahTim3 += parseInt(fidyah.jumlah_zakat);
+      }
+
+      for (let i = 0; i < fidyahTim4.length; i++) {
+        const fidyah = fidyahTim4[i];
+        totalFidyahTim4 += parseInt(fidyah.jumlah_zakat);
+      }
+      
+      for (let i = 0; i < fidyahTim5.length; i++) {
+        const fidyah = fidyahTim5[i];
+        totalFidyahTim5 += parseInt(fidyah.jumlah_zakat);
+      }
+      
+      for (let i = 0; i < fidyahTim6.length; i++) {
+        const fidyah = fidyahTim6[i];
+        totalFidyahTim6 += parseInt(fidyah.jumlah_zakat);
+      }
+      
+      for (let i = 0; i < fidyahTim7.length; i++) {
+        const fidyah = fidyahTim7[i];
+        totalFidyahTim7 += parseInt(fidyah.jumlah_zakat);
+      }
+
+      // console.log(totalFidyahTim1);
+      // console.log(totalFidyahTim2);
+      // console.log(totalFidyahTim3);
+      // console.log(totalFidyahTim4);
+      // console.log(totalFidyahTim5);
+      // console.log(totalFidyahTim6);
+      // console.log(totalFidyahTim7);
+
+      const jumlah_seluruh_dana_tim = totalFidyahTim1 + totalFidyahTim2 + totalFidyahTim3 +totalFidyahTim4 + totalFidyahTim4 + totalFidyahTim5 + totalFidyahTim6 + totalFidyahTim7;
+
+      console.log(jumlah_seluruh_dana_tim)
+
       let myData = {
-        jumlahKeluarga: jumlahKeluarga,
-        jumlahJamah: jumlahJamah,
+        jumlahKeluargaYangMembayarZakat: jumlahKeluarga,
+        
+        jumlahPembayarZakat : jumlahJamaahYangMembayarZakat,
+        jumlahPembayarFidyah : jumlahPembayarFidyah,
+
+
+
         jumlahSeluruhZakat: jumlahSeluruhZakat,
         jumlahSeluruhSodakoh: jumlahSeluruhSodakoh,
         jumlahSeluruhfidyah: jumlahSeluruhfidyah,
-        jumlahSeluruhnya: jumlahSeluruhnya,
+        jumlahSeluruhDanaZakatSodakohDanFidyah : jumlahSeluruhnya,
+        totalZakatTim1:totalFidyahTim1,
+        totalZakatTim2:totalFidyahTim2,
+        totalZakatTim3:totalFidyahTim3,
+        totalZakatTim4:totalFidyahTim4,
+        totalZakatTim5:totalFidyahTim5,
+        totalZakatTim6:totalFidyahTim6,
+        totalZakatTim7:totalFidyahTim7,
       };
       ViewResponse.success(
         res,
@@ -154,10 +445,10 @@ class ControllerInputZakatV1 {
         const family = await ServiceFamily.readById(zakat.uuid_family);
         const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
         const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
-        const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
-        const jumlah_fidyah = fidyah.jumlah_fidyah;
+        //const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
+        //const jumlah_fidyah = fidyah.jumlah_fidyah;
         const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
-        console.log(jumlah_fidyah);
+        //console.log(jumlah_fidyah);
         results.push({
           uuid_zakat: await zakat.uuid,
           id_keluarga: await zakat.uuid_family,
@@ -166,9 +457,10 @@ class ControllerInputZakatV1 {
           jumlah_anggota_keluarga: await jamaahs.length,
           jumlah_pembayaran_zakat: await zakat.jumlah_zakat,
           jumlah_pembayaran_sodaqoh: jumlah_sodakoh,
-          jumlah_pembayaran_fidyah : jumlah_fidyah,
-          total_bayar: (await zakat.jumlah_zakat) + jumlah_sodakoh + jumlah_fidyah,
+          //jumlah_pembayaran_fidyah : jumlah_fidyah,
+          total_bayar: (await zakat.jumlah_zakat) + jumlah_sodakoh, //+ jumlah_fidyah,
           banyakKeluarga: await banyakZakat,
+          tim: await zakat.tim,
         });
         
       }
@@ -179,6 +471,7 @@ class ControllerInputZakatV1 {
         200
       );
     } catch (error) {
+      console.log(error)
       ViewResponse.fail(res, "gagal ambil data", error, gagal);
     }
   }
@@ -285,6 +578,7 @@ class ControllerInputZakatV1 {
             dataJamaahs.push(newJamaah);
           }
         } catch (error) {
+          console.log(error)
           throw new Error(`gagal input jamaan ${jamaah} error : ${error}`);
         }
       }
@@ -317,16 +611,16 @@ class ControllerInputZakatV1 {
       let newsodakoh = await ServiceSodakoh.createSodakoh(sodakoh);
 
       
-      //insert fidyah
-      if(pembayarZakat.fidyah === "" || pembayarZakat.fidyah == null){
-        pembayarZakat.fidyah = 0;
-      }
-      let fidyah = {
-        uuid_family: resutNewFamily.uuid,
-        jumlah_fidyah: pembayarZakat.fidyah,
-        tahun: "2024",
-      };
-      let newfidyah = await ServiceFidyah.createFidyah(fidyah);
+      // //insert fidyah
+      // if(pembayarZakat.fidyah === "" || pembayarZakat.fidyah == null){
+      //   pembayarZakat.fidyah = 0;
+      // }
+      // let fidyah = {
+      //   uuid_family: resutNewFamily.uuid,
+      //   jumlah_fidyah: pembayarZakat.fidyah,
+      //   tahun: "2024",
+      // };
+      // let newfidyah = await ServiceFidyah.createFidyah(fidyah);
 
       //console.log(newsodakoh);
       //throw new Error("tes");
@@ -337,7 +631,7 @@ class ControllerInputZakatV1 {
         keluarga: resutNewFamily,
         anggota_keluarga: dataJamaahs,
         zakat: newZakat,
-        fidyah : newfidyah,
+        //fidyah : /*newfidyah*/ {jumlah_fidyah:0},
         sodakoh: newsodakoh,
       };
 

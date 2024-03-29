@@ -20,6 +20,16 @@ class ServiceFidyah{
             throw new Error("uuid family tidak terdaftar");
         }
 
+        const uuid_jamaah = await prisma.jamaah.findUnique({
+            where:{
+                uuid:fidyah.uuid_jamaah,
+            }
+        })
+        if(!uuid_jamaah){
+            //deleteFile(`uploads/${jamaah.foto}`)
+            throw new Error("uuid family tidak terdaftar");
+        }
+
         try {
             fidyah.jumlah_fidyah =  parseInt(fidyah.jumlah_fidyah);
             fidyah.tahun = parseInt(fidyah.tahun);
@@ -27,8 +37,10 @@ class ServiceFidyah{
                 data : {
                     uuid:nanoid(),
                     uuid_family:fidyah.uuid_family,
+                    uuid_jamaah:fidyah.uuid_jamaah,
                     jumlah_fidyah:fidyah.jumlah_fidyah,
                     tahun:fidyah.tahun,
+                    tim : fidyah.tim,
                 }
             })
             
@@ -52,6 +64,16 @@ class ServiceFidyah{
         if(!data){
             throw new Error("Data tidak di temukan");
         }
+        return data
+    }
+
+    static async readByTeam(tim){
+        const data = await prisma.fidyah.findMany({
+            where:{
+                tim:tim
+            }
+        })
+        
         return data
     }
     

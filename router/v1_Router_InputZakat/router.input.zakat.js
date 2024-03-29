@@ -17,6 +17,18 @@ routerInputZakat.use(cors({
 //   return res.send(200)
 // })
 
+routerInputZakat.post("/input-fidyah/",async(req,res)=>{
+  ControllerInputZakatV1.inputKususFidyah(req,res);
+})
+routerInputZakat.get("/search/fidyahAll/",async(req,res)=>{
+  ControllerInputZakatV1.seluruhPembayaranFidyah(req,res)
+})
+routerInputZakat.delete("/search/fidyahDelete/:uuid",async(req,res)=>{
+  ControllerInputZakatV1.deletePembayaranFidyah(req,res);
+})
+//fidyah di atas 
+
+
 routerInputZakat.post("/input/",async(req,res)=>{
   ControllerInputZakatV1.inputZakatJamaah(req,res);
 })

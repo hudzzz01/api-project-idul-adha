@@ -80,6 +80,7 @@ model Jamaah {
   uuid_masjid         String
   family              Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
   uuid_family         String
+  fidyah              Fidyah[]
 }
 
 model Family {
@@ -120,6 +121,9 @@ model Fidyah {
   create_at     DateTime @default(now())
   family        Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
   uuid_family   String
+  jamaah        Jamaah   @relation(fields: [uuid_jamaah], references: [uuid], onDelete: Cascade)
+  uuid_jamaah   String
+  tim           String?
 }
 
 model Sodakoh {
