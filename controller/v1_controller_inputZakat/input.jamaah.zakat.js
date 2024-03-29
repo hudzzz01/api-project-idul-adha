@@ -105,13 +105,13 @@ class ControllerInputZakatV1 {
       
       
       //dapatkan kesimpulan tim
-      let fidyahTim1 = await ServiceFidyah.readByTeam("tim1");
-      let fidyahTim2 = await ServiceFidyah.readByTeam("tim2");
-      let fidyahTim3 = await ServiceFidyah.readByTeam("tim3");
-      let fidyahTim4 = await ServiceFidyah.readByTeam("tim4");
-      let fidyahTim5 = await ServiceFidyah.readByTeam("tim5");
-      let fidyahTim6 = await ServiceFidyah.readByTeam("tim6");
-      let fidyahTim7 = await ServiceFidyah.readByTeam("tim7");
+      let fidyahTim1 = await ServiceFidyah.readByTeam("1");
+      let fidyahTim2 = await ServiceFidyah.readByTeam("2");
+      let fidyahTim3 = await ServiceFidyah.readByTeam("3");
+      let fidyahTim4 = await ServiceFidyah.readByTeam("4");
+      let fidyahTim5 = await ServiceFidyah.readByTeam("5");
+      let fidyahTim6 = await ServiceFidyah.readByTeam("6");
+      let fidyahTim7 = await ServiceFidyah.readByTeam("7");
 
       let totalFidyahTim1 = 0;
       let totalFidyahTim2 = 0;
@@ -267,13 +267,13 @@ class ControllerInputZakatV1 {
 
 
       //dapatkan kesimpulan tim ZAKAT !!!!!!
-      let fidyahTim1 = await ServiceZakat.readByTeam("tim1");
-      let fidyahTim2 = await ServiceZakat.readByTeam("tim2");
-      let fidyahTim3 = await ServiceZakat.readByTeam("tim3");
-      let fidyahTim4 = await ServiceZakat.readByTeam("tim4");
-      let fidyahTim5 = await ServiceZakat.readByTeam("tim5");
-      let fidyahTim6 = await ServiceZakat.readByTeam("tim6");
-      let fidyahTim7 = await ServiceZakat.readByTeam("tim7");
+      let fidyahTim1 = await ServiceZakat.readByTeam("1");
+      let fidyahTim2 = await ServiceZakat.readByTeam("2");
+      let fidyahTim3 = await ServiceZakat.readByTeam("3");
+      let fidyahTim4 = await ServiceZakat.readByTeam("4");
+      let fidyahTim5 = await ServiceZakat.readByTeam("5");
+      let fidyahTim6 = await ServiceZakat.readByTeam("6");
+      let fidyahTim7 = await ServiceZakat.readByTeam("7");
 
       let totalFidyahTim1 = 0;
       let totalFidyahTim2 = 0;
