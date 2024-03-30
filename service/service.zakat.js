@@ -105,6 +105,7 @@ class ServiceZakat{
         try {
                 zakat.jumlah_zakat =  parseInt(zakat.jumlah_zakat);
                 zakat.tahun = parseInt(zakat.tahun);
+                zakat.tim = zakat.tim;
                 data = await prisma.zakat.update({
                 where:{
                     uuid:uuid

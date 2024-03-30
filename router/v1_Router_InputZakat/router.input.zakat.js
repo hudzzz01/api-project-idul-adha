@@ -23,6 +23,7 @@ routerInputZakat.post("/input-fidyah/",async(req,res)=>{
 routerInputZakat.get("/search/fidyahAll/",async(req,res)=>{
   ControllerInputZakatV1.seluruhPembayaranFidyah(req,res)
 })
+
 routerInputZakat.delete("/search/fidyahDelete/:uuid",async(req,res)=>{
   ControllerInputZakatV1.deletePembayaranFidyah(req,res);
 })
@@ -35,6 +36,12 @@ routerInputZakat.post("/input/",async(req,res)=>{
 
 routerInputZakat.get("/search/all/",async(req,res)=>{
   ControllerInputZakatV1.seluruhPembayaranZakat(req,res);
+})
+routerInputZakat.get("/search/zakat/id/:uuid",async(req,res)=>{
+  ControllerInputZakatV1.getPembayaranZakatById(req,res);
+})
+routerInputZakat.put("/search/zakat/update/:uuid",async(req,res)=>{
+  ControllerInputZakatV1.updatePembayaranZakat(req,res);
 })
 
 routerInputZakat.get("/search/pagination/",async(req,res)=>{

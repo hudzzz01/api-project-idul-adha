@@ -93,6 +93,32 @@ class ServiceJamaah{
         return data
     }
     
+    static async getCowoCewe(){
+        let cowo = 
+        (await prisma.jamaah.findMany()).length
+        -
+        (await prisma.jamaah.findMany({
+            where :{
+                bin:"",
+            }
+        })).length
+        
+        let cewe = 
+        (await prisma.jamaah.findMany({})).length
+        -
+        (await prisma.jamaah.findMany({
+            where:{
+                binti:"",
+            }
+        })).length
+        
+
+        return{
+            cowo:cowo,
+            cewe:cewe,
+        }
+    }
+
     static async readName(name){
         
         let data = await prisma.jamaah.findMany({
