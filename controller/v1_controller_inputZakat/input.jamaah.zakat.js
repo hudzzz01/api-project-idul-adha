@@ -394,7 +394,7 @@ class ControllerInputZakatV1 {
   }
 
   static async seluruhPembayaranZakatWithPagination(req, res) {
-    try {
+    // try {
       console.log("Get all Zakat With Pagination => ");
       let results = [];
       const page = req.query.page;
@@ -410,9 +410,18 @@ class ControllerInputZakatV1 {
         const zakat = zakats[i];
         const family = await ServiceFamily.readById(zakat.uuid_family);
         const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
+        
         const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
-        const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
-        const jumlah_fidyah = fidyah.jumlah_fidyah;
+        let fidyah;
+        let jumlah_fidyah;
+
+        try{
+          fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
+          jumlah_fidyah = fidyah.jumlah_fidyah;
+        }catch{
+          fidyah = null;
+          jumlah_fidyah = 0;
+        }
         const jumlah_sodakoh = sodakoh.jumlah_sodakoh;
         //console.log(jumlah_fidyah);
         results.push({
@@ -435,9 +444,9 @@ class ControllerInputZakatV1 {
         results,
         200
       );
-    } catch (error) {
-      ViewResponse.fail(res, "gagal ambil data", error, gagal);
-    }
+    // } catch (error) {
+    //   ViewResponse.fail(res, "gagal ambil data", error, gagal);
+    // }
   }
 
   static async seluruhPembayaranZakat(req, res) {
@@ -452,6 +461,11 @@ class ControllerInputZakatV1 {
         const zakat = zakats[i];
         const family = await ServiceFamily.readById(zakat.uuid_family);
         const jamaahs = await ServiceJamaah.readByFamilyId(zakat.uuid_family);
+
+        // console.log(zakat);
+        // return
+        
+
         const sodakoh = await ServiceSodakoh.readByFamilyId(zakat.uuid_family);
         //const fidyah = await ServiceFidyah.readByFamilyId(zakat.uuid_family);
         //const jumlah_fidyah = fidyah.jumlah_fidyah;
@@ -625,6 +639,9 @@ class ControllerInputZakatV1 {
 
         */
 
+
+        
+
     try {
       let pembayarZakat = req.body;
 
@@ -650,9 +667,12 @@ class ControllerInputZakatV1 {
         email: pembayarZakat.email,
       };
 
-      //console.log(`new family : ${newFamily}`);
+      // console.log(`new family : ${newFamily}`);
 
       let resutNewFamily = await ServiceFamily.createFamily(newFamily);
+
+      console.log(newFamily);
+
 
       //console.log(`resut new family : ${resutNewFamily.uuid}`);
 
@@ -714,6 +734,7 @@ class ControllerInputZakatV1 {
         uuid_family: resutNewFamily.uuid,
         jumlah_zakat: amoutZakat,
         tim: pembayarZakat.tim,
+        malamId : pembayarZakat.malamId,  
         tahun: "2024",
       };
       let newZakat = await ServiceZakat.createZakat(zakat);
@@ -725,6 +746,7 @@ class ControllerInputZakatV1 {
       let sodakoh = {
         uuid_family: resutNewFamily.uuid,
         jumlah_sodakoh: pembayarZakat.sodakoh,
+        malamId : pembayarZakat.malamId,
         tahun: "2024",
       };
       let newsodakoh = await ServiceSodakoh.createSodakoh(sodakoh);

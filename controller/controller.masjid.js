@@ -12,7 +12,14 @@ class ControllerMasjid{
     static async createMasjid(req,res){
         try {
             const masjid = req.body;
-            masjid.foto = req.file.filename;
+
+            try{
+                masjid.foto = req.file.filename;
+            }catch{
+                masjid.foto = ""
+            }
+            
+
             const createMasjid = await ServiceMasjid.createMasjid(masjid);
             ViewResponse.success(res,"berhasil menambahkan masjid baru",createMasjid,200)
         } catch (error) {

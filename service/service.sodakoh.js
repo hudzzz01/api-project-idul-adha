@@ -10,6 +10,8 @@ class ServiceSodakoh{
     static async createSodakoh(sodakoh){
         //const ciperPassword = CryptoJS.HmacSHA256(jamaah.password,"kamu kenapa sini cerita").toString();
         //console.log(ciperPassword)
+        console.log(sodakoh);
+        
         const uuid_family = await prisma.family.findUnique({
             where:{
                 uuid:sodakoh.uuid_family,
@@ -23,12 +25,15 @@ class ServiceSodakoh{
         try {
             sodakoh.jumlah_sodakoh =  parseInt(sodakoh.jumlah_sodakoh);
             sodakoh.tahun = parseInt(sodakoh.tahun);
+            sodakoh.malamId = parseInt(sodakoh.malamId)
             return await prisma.sodakoh.create({
                 data : {
                     uuid:nanoid(),
                     uuid_family:sodakoh.uuid_family,
                     jumlah_sodakoh:sodakoh.jumlah_sodakoh,
                     tahun:sodakoh.tahun,
+                    malamId:sodakoh.malamId,
+                    tim : sodakoh.tim
                 }
             })
             

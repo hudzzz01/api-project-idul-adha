@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -102,36 +102,59 @@ model Family {
   Fidyah               Fidyah[]
 }
 
+model Malam {
+  id   Int    @id @default(autoincrement())
+  nama String
+
+  zakat   Zakat[]
+  sodakoh Sodakoh[]
+  fidyah  Fidyah[]
+}
+
 model Zakat {
-  id           Int      @unique @default(autoincrement())
-  uuid         String   @id
+  id           Int      @id @default(autoincrement())
+  uuid         String   @unique
   jumlah_zakat Int
   tahun        Int?
   create_at    DateTime @default(now())
   tim          String?
-  family       Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
-  uuid_family  String
+
+  uuid_family String
+  family      Family @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
+
+  malamId Int
+  malam   Malam @relation(fields: [malamId], references: [id], onDelete: Cascade)
 }
 
 model Fidyah {
-  id            Int      @unique @default(autoincrement())
-  uuid          String   @id
+  id            Int      @id @default(autoincrement())
+  uuid          String   @unique
   jumlah_fidyah Int
   tahun         Int?
   create_at     DateTime @default(now())
-  family        Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
-  uuid_family   String
-  jamaah        Jamaah   @relation(fields: [uuid_jamaah], references: [uuid], onDelete: Cascade)
-  uuid_jamaah   String
   tim           String?
+
+  uuid_family String
+  family      Family @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
+
+  uuid_jamaah String
+  jamaah      Jamaah @relation(fields: [uuid_jamaah], references: [uuid], onDelete: Cascade)
+
+  malamId Int
+  malam   Malam @relation(fields: [malamId], references: [id], onDelete: Cascade)
 }
 
 model Sodakoh {
-  id             Int      @unique @default(autoincrement())
-  uuid           String   @id
+  id             Int      @id @default(autoincrement())
+  uuid           String   @unique
   jumlah_sodakoh Int
   tahun          Int?
   create_at      DateTime @default(now())
-  family         Family   @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
-  uuid_family    String
+   tim           String?
+
+  uuid_family String
+  family      Family @relation(fields: [uuid_family], references: [uuid], onDelete: Cascade)
+
+  malamId Int
+  malam   Malam @relation(fields: [malamId], references: [id], onDelete: Cascade)
 }

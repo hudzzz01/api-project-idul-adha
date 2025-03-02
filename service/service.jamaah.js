@@ -10,6 +10,7 @@ class ServiceJamaah{
     static async createJamaah(jamaah){
         const ciperPassword = CryptoJS.HmacSHA256(jamaah.password,"kamu kenapa sini cerita").toString();
         //console.log(ciperPassword)
+        console.log(jamaah);
         const uuid_masjid = await prisma.masjid.findUnique({
             where:{
                 uuid:jamaah.uuid_masjid,
@@ -30,6 +31,9 @@ class ServiceJamaah{
         }
 
         try {
+
+            
+
 
             return await prisma.jamaah.create({
                 data : {

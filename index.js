@@ -16,7 +16,7 @@ const port = 5000;
 app.use(cors({
   origin: '*',
 }));
-app.use("/user",routerUser);
+app.use("/users",routerUser);
 app.use("/auth",routerAuth);
 app.use("/jamaah",routerJamaah);
 app.use("/masjid",routerMasjid);

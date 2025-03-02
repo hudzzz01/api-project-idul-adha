@@ -10,6 +10,9 @@ class ServiceFidyah{
     static async createFidyah(fidyah){
         //const ciperPassword = CryptoJS.HmacSHA256(jamaah.password,"kamu kenapa sini cerita").toString();
         //console.log(ciperPassword)
+
+        // console.log(fidyah);
+        
         const uuid_family = await prisma.family.findUnique({
             where:{
                 uuid:fidyah.uuid_family,
@@ -27,12 +30,17 @@ class ServiceFidyah{
         })
         if(!uuid_jamaah){
             //deleteFile(`uploads/${jamaah.foto}`)
-            throw new Error("uuid family tidak terdaftar");
+            throw new Error("uuid jamaah tidak terdaftar");
         }
 
         try {
             fidyah.jumlah_fidyah =  parseInt(fidyah.jumlah_fidyah);
             fidyah.tahun = parseInt(fidyah.tahun);
+            fidyah.malamId = parseInt(fidyah.malamId)
+            fidyah.uuid_masjid = parseInt(fidyah.uuid_masjid)
+            
+
+    
             return await prisma.fidyah.create({
                 data : {
                     uuid:nanoid(),
@@ -41,6 +49,7 @@ class ServiceFidyah{
                     jumlah_fidyah:fidyah.jumlah_fidyah,
                     tahun:fidyah.tahun,
                     tim : fidyah.tim,
+                    malamId : fidyah.malamId
                 }
             })
             

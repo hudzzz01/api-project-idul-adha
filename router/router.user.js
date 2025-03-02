@@ -22,6 +22,7 @@ routerUser.post("/",upload.single('img'),async(req,res)=>{
     ControllerUser.createUser(req,res);
 })
 
+
 //edit data user by id (wajib Login)
 routerUser.put("/:id",auth,upload.single('img'),async(req,res)=>{
     ControllerUser.updateUser(req,res);

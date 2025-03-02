@@ -10,6 +10,9 @@ class ServiceZakat{
     static async createZakat(zakat){
         //const ciperPassword = CryptoJS.HmacSHA256(jamaah.password,"kamu kenapa sini cerita").toString();
         //console.log(ciperPassword)
+
+      
+        
         const uuid_family = await prisma.family.findUnique({
             where:{
                 uuid:zakat.uuid_family,
@@ -23,6 +26,7 @@ class ServiceZakat{
         try {
             zakat.jumlah_zakat =  parseInt(zakat.jumlah_zakat);
             zakat.tahun = parseInt(zakat.tahun);
+            zakat.malamId = parseInt(zakat.malamId)
             return await prisma.zakat.create({
                 data : {
                     uuid:nanoid(),
@@ -30,6 +34,7 @@ class ServiceZakat{
                     jumlah_zakat:zakat.jumlah_zakat,
                     tahun:zakat.tahun,
                     tim:zakat.tim,
+                    malamId : zakat.malamId
                 }
             })
             
@@ -114,6 +119,7 @@ class ServiceZakat{
                     uuid_family:zakat.uuid_family,
                     jumlah_zakat:zakat.jumlah_zakat,
                     tahun:zakat.tahun,
+                    malamId : zakat.malamId
                 }
             })
         } catch (error) {
