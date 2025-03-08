@@ -150,6 +150,15 @@ class ServiceZakat{
             }
         })
     }
+
+    static async readAllQuery(){
+        const zakats = await prisma.$queryRaw`SELECT * FROM "Zakat"`;
+
+        console.log(zakats);
+        
+    }
+
+ 
 }
 
 export default ServiceZakat;

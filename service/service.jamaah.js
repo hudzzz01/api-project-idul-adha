@@ -68,7 +68,7 @@ class ServiceJamaah{
             }
         })
         if(!data){
-            throw new Error("Data tidak di temukan");
+            throw new Error("Data jamaah tidak di temukan");
         }
         return data
     }
@@ -79,7 +79,7 @@ class ServiceJamaah{
             }
         })
         if(data.length == 0){
-            throw new Error("Data tidak di temukan");
+            throw new Error("Data damily tidak di temukan");
         }
         return data
     }
@@ -214,6 +214,8 @@ class ServiceJamaah{
             }
         })
     }
+
+  
 }
 
 export default ServiceJamaah;
